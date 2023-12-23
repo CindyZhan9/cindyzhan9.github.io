@@ -1,0 +1,386 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>云计算实验 | CindyZhang's Blog</title><meta name="author" content="CindyZhang"><meta name="copyright" content="CindyZhang"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、实验要求4个不同气象单位分别统计全球1990年等不同年份的某时刻气温，请采用MapReduce编程找出每年的最高气温。 temperature1.txt 1990 21.61990 19.41991 20.51992 31.21990 22.3 temperature2.txt 1990 21.71990 18.51991 21.41992 30.81990 21.2 temperature3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="云计算实验">
+<meta property="og:url" content="https://cindyzhan9.com/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/index.html">
+<meta property="og:site_name" content="CindyZhang&#39;s Blog">
+<meta property="og:description" content="一、实验要求4个不同气象单位分别统计全球1990年等不同年份的某时刻气温，请采用MapReduce编程找出每年的最高气温。 temperature1.txt 1990 21.61990 19.41991 20.51992 31.21990 22.3 temperature2.txt 1990 21.71990 18.51991 21.41992 30.81990 21.2 temperature3">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cindyzhan9.com/img/avatar.gif">
+<meta property="article:published_time" content="2023-12-23T10:00:11.000Z">
+<meta property="article:modified_time" content="2023-12-23T10:33:47.631Z">
+<meta property="article:author" content="CindyZhang">
+<meta property="article:tag" content="云计算">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cindyzhan9.com/img/avatar.gif"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://cindyzhan9.com/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?7150eb223d604ebdfc59637652f44521";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '云计算实验',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-12-23 18:33:47'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/avatar.gif" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/%E4%B8%BB%E9%A1%B5top.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="CindyZhang's Blog"><span class="site-name">CindyZhang's Blog</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">云计算实验</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-23T10:00:11.000Z" title="发表于 2023-12-23 18:00:11">2023-12-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-12-23T10:33:47.631Z" title="更新于 2023-12-23 18:33:47">2023-12-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/%E4%BA%91%E8%AE%A1%E7%AE%97/">云计算</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="云计算实验"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="一、实验要求"><a href="#一、实验要求" class="headerlink" title="一、实验要求"></a>一、实验要求</h2><p>4个不同气象单位分别统计全球1990年等不同年份的某时刻气温，请采用MapReduce编程找出每年的最高气温。</p>
+<p><strong>temperature1.txt</strong></p>
+<p>1990 21.6<br>1990 19.4<br>1991 20.5<br>1992 31.2<br>1990 22.3</p>
+<p><strong>temperature2.txt</strong></p>
+<p>1990 21.7<br>1990 18.5<br>1991 21.4<br>1992 30.8<br>1990 21.2</p>
+<p><strong>temperature3.txt</strong></p>
+<p>1990 21.4<br>1990 18.6<br>1991 21.3<br>1992 30.6<br>1990 21.1</p>
+<p><strong>temperature4.txt</strong></p>
+<p>1990 21.1<br>1990 18.6<br>1991 21.3<br>1992 30.2<br>1990 21.5</p>
+<p>四个温度文件下载：<a href="/_posts/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/data_temp.zip">点击下载-温度文件</a></p>
+<h2 id="二、环境配置"><a href="#二、环境配置" class="headerlink" title="二、环境配置"></a>二、环境配置</h2><p>hadoop版本：2.5.2</p>
+<p>hadoop集群：</p>
+<table>
+<thead>
+<tr>
+<th align="center">虚拟机</th>
+<th align="center">系统</th>
+<th align="center">ip</th>
+<th align="center">内存</th>
+<th align="center">处理器</th>
+<th align="center">硬盘</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">master</td>
+<td align="center">CentOS6.5</td>
+<td align="center">192.168.137.128</td>
+<td align="center">2GB</td>
+<td align="center">1</td>
+<td align="center">30G</td>
+</tr>
+<tr>
+<td align="center">slave</td>
+<td align="center">CentOS6.5</td>
+<td align="center">192.168.137.129</td>
+<td align="center">1GB</td>
+<td align="center">1</td>
+<td align="center">30G</td>
+</tr>
+<tr>
+<td align="center">slave1</td>
+<td align="center">CentOS6.5</td>
+<td align="center">192.168.137.130</td>
+<td align="center">1GB</td>
+<td align="center">1</td>
+<td align="center">30G</td>
+</tr>
+</tbody></table>
+<p>ssh通信：MTPuTTy</p>
+<p>开发机器：master</p>
+<p>开发语言：JAVA</p>
+<p>开发环境: intellij IEDA 2017.3.7</p>
+<p>jdk版本: 1.7.0_71</p>
+<p>这里我提供已经完全配置好的三个虚拟机：<a href="/_posts/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/cluster.zip">点击下载-虚拟机</a></p>
+<p>密码：Zxd030411</p>
+<h2 id="三、项目搭建"><a href="#三、项目搭建" class="headerlink" title="三、项目搭建"></a>三、项目搭建</h2><h3 id="1-新建Maven项目"><a href="#1-新建Maven项目" class="headerlink" title="1.新建Maven项目"></a>1.新建Maven项目</h3><p><img src="/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/image-20231117230356509.png" alt="image-20231117230356509"></p>
+<h3 id="2-设置组标识和项目标识"><a href="#2-设置组标识和项目标识" class="headerlink" title="2.设置组标识和项目标识"></a>2.设置组标识和项目标识</h3><p><img src="/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/image-20231117231359781.png" alt="image-20231117231359781"></p>
+<h3 id="3-设置项目路径和名称"><a href="#3-设置项目路径和名称" class="headerlink" title="3.设置项目路径和名称"></a>3.设置项目路径和名称</h3><p><img src="/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/image-20231117231521884.png" alt="image-20231117231521884"></p>
+<h3 id="4-添加依赖项"><a href="#4-添加依赖项" class="headerlink" title="4.添加依赖项"></a>4.添加依赖项</h3><p><img src="/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/image-20231117232539674.png" alt="image-20231117232539674"></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.11<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&lt;!-- https://mvnrepository.com/artifact/log4j/log4j --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>log4j<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>log4j<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.17<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-common<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.5.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-hdfs<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.5.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-client<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.5.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-mapreduce-client-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.5.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.hadoop<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hadoop-yarn-api<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.5.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-配置log4j方便查看运行日志"><a href="#5-配置log4j方便查看运行日志" class="headerlink" title="5.配置log4j方便查看运行日志"></a>5.配置log4j方便查看运行日志</h3><p><img src="/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/image-20231118021328083.png" alt="image-20231118021328083"></p>
+<p>log4j.properties</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">log4j.rootLogger</span>=<span class="string">DEBUG, Console</span></span><br><span class="line"><span class="comment">#Console</span></span><br><span class="line"><span class="attr">log4j.appender.Console</span>=<span class="string">org.apache.log4j.ConsoleAppender</span></span><br><span class="line"><span class="attr">log4j.appender.Console.layout</span>=<span class="string">org.apache.log4j.PatternLayout</span></span><br><span class="line"><span class="attr">log4j.appender.Console.layout.ConversionPattern</span>=<span class="string">%d [%t] %-5p [%c] - %m%n</span></span><br><span class="line"><span class="attr">log4j.logger.java.sql.ResultSet</span>=<span class="string">INFO</span></span><br><span class="line"><span class="attr">log4j.logger.org.apache</span>=<span class="string">INFO</span></span><br><span class="line"><span class="attr">log4j.logger.java.sql.Connection</span>=<span class="string">DEBUG</span></span><br><span class="line"><span class="attr">log4j.logger.java.sql.Statement</span>=<span class="string">DEBUG</span></span><br><span class="line"><span class="attr">log4j.logger.java.sql.PreparedStatement</span>=<span class="string">DEBUG</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="6-进行MapReduce编程"><a href="#6-进行MapReduce编程" class="headerlink" title="6.进行MapReduce编程"></a>6.进行MapReduce编程</h3><p>分析：需要编写三个类：maxTempMain、maxTempMapper、maxTempReducer</p>
+<p>其中maxTempMain为主类，将map和reduce组织起来成为作业并处理；</p>
+<p>maxTempMapper继承Mapper类，读取每行文本，提取年份和对应的气温并形成键值对写入上下文，年份作为键，气温作为值；</p>
+<p>maxTempReducer继承Reducer类，处理maxTempMapper提交的键值对，遍历键对应的值，找出其中的最大值并将键重新映射到这个最大值,最后写入上下文</p>
+<p><img src="/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/image-20231118022734550.png" alt="image-20231118022734550"></p>
+<p>maxTempMain.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.xtu.zxd.maxTemperatures;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.conf.Configuration;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.fs.Path;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.FloatWritable;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.Text;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.Job;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.lib.input.FileInputFormat;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.lib.input.TextInputFormat;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">maxTempMain</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception&#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">inpath</span> <span class="operator">=</span> args[<span class="number">0</span>];</span><br><span class="line">        <span class="type">String</span> <span class="variable">outpath</span> <span class="operator">=</span> args[<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">        <span class="type">Job</span> <span class="variable">job</span> <span class="operator">=</span> Job.getInstance(<span class="keyword">new</span> <span class="title class_">Configuration</span>(), maxTempMain.class.getName());</span><br><span class="line"></span><br><span class="line">        job.setJarByClass(maxTempMain.class);</span><br><span class="line"></span><br><span class="line">        job.setInputFormatClass(TextInputFormat.class);</span><br><span class="line">        job.setOutputFormatClass(TextOutputFormat.class);</span><br><span class="line"></span><br><span class="line">        job.setMapperClass(maxTempMapper.class);</span><br><span class="line">        job.setReducerClass(maxTempReducer.class);</span><br><span class="line"></span><br><span class="line">        job.setMapOutputKeyClass(Text.class);</span><br><span class="line">        job.setMapOutputValueClass(FloatWritable.class);</span><br><span class="line"></span><br><span class="line">        job.setOutputKeyClass(Text.class);</span><br><span class="line">        job.setOutputValueClass(FloatWritable.class);</span><br><span class="line"></span><br><span class="line">        FileInputFormat.setInputPaths(job,<span class="keyword">new</span> <span class="title class_">Path</span>(inpath));</span><br><span class="line">        FileOutputFormat.setOutputPath(job,<span class="keyword">new</span> <span class="title class_">Path</span>(outpath));</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> job.waitForCompletion(<span class="literal">true</span>)?<span class="number">0</span>:<span class="number">1</span>;</span><br><span class="line">        System.out.println(<span class="string">&quot;Complete!&quot;</span>);</span><br><span class="line">        System.exit(num);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>maxTempMapper.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.xtu.zxd.maxTemperatures;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.LongWritable;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.FloatWritable;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.Text;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.Mapper;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">maxTempMapper</span> <span class="keyword">extends</span> <span class="title class_">Mapper</span>&lt;LongWritable,Text,Text,FloatWritable&gt;&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">map</span><span class="params">(LongWritable key,Text value,Context context)</span> <span class="keyword">throws</span> java.io.IOException,InterruptedException&#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">line</span> <span class="operator">=</span> value.toString();</span><br><span class="line">        String[] words = line.split(<span class="string">&quot; &quot;</span>);</span><br><span class="line">        <span class="keyword">if</span> (words.length&gt;<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">year</span> <span class="operator">=</span> words[<span class="number">0</span>];</span><br><span class="line">            <span class="type">float</span> <span class="variable">temp</span> <span class="operator">=</span> Float.parseFloat(words[<span class="number">1</span>]);</span><br><span class="line">            context.write(<span class="keyword">new</span> <span class="title class_">Text</span>(year),<span class="keyword">new</span> <span class="title class_">FloatWritable</span>(temp));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>maxTempReducer.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.xtu.zxd.maxTemperatures;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.FloatWritable;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.Text;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.mapreduce.Reducer;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">maxTempReducer</span> <span class="keyword">extends</span> <span class="title class_">Reducer</span>&lt;Text,FloatWritable,Text,FloatWritable&gt;&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">reduce</span><span class="params">(Text key, Iterable&lt;FloatWritable&gt; values, Context context)</span> <span class="keyword">throws</span> java.io.IOException,InterruptedException&#123;</span><br><span class="line">        <span class="type">float</span> <span class="variable">maxTemp</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (FloatWritable temp:values)&#123;</span><br><span class="line">            <span class="keyword">if</span> (temp.get()&gt;maxTemp)&#123;</span><br><span class="line">                maxTemp = temp.get();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        context.write(key,<span class="keyword">new</span> <span class="title class_">FloatWritable</span>(maxTemp));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-进行本地测试"><a href="#7-进行本地测试" class="headerlink" title="7.进行本地测试"></a>7.进行本地测试</h3><p>我在master本地准备好了文件</p>
+<p><img src="/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/image-20231118023727560.png" alt="image-20231118023727560"></p>
+<p>项目运行参数配置为</p>
+<p>&#x2F;home&#x2F;cindyzhang&#x2F;workData&#x2F;temperatures&#x2F;* &#x2F;home&#x2F;cindyzhang&#x2F;outputs&#x2F;output1</p>
+<p><img src="/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/image-20231118023928398.png" alt="image-20231118023928398"></p>
+<p>运行maxTempMain.java,得到结果：</p>
+<p><img src="/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/image-20231118024231390.png" alt="image-20231118024231390"></p>
+<p>故本地测试无异常，下面提交到集群上运行</p>
+<h3 id="8-打包作业"><a href="#8-打包作业" class="headerlink" title="8.打包作业"></a>8.打包作业</h3><p>直接在Maven Projects按顺序点击：</p>
+<p><img src="/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/image-20231118024829968.png" alt="image-20231118024829968"></p>
+<p>程序运行完毕即打包成功，左侧target里面就有打好的jar包</p>
+<p><img src="/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/image-20231118024948558.png" alt="image-20231118024948558"></p>
+<h3 id="9-开启hadoop集群"><a href="#9-开启hadoop集群" class="headerlink" title="9.开启hadoop集群"></a>9.开启hadoop集群</h3><p>在master、slave、slave1三台虚拟机均开机状态下，</p>
+<p>在master的命令行运行命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/home/cindyzhang/hadoop-2.5.2/sbin/start-all.sh</span><br></pre></td></tr></table></figure>
+
+<p>待其执行完，输入jps出现下面节点即表明master启动成功</p>
+<p><img src="/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/image-20231223181815464.png" alt="image-20231223181815464"></p>
+<p>在slave命令行输入jps出现下面节点</p>
+<p><img src="/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/image-20231223181856182.png" alt="image-20231223181856182"></p>
+<p>在slave1命令行输入jps出现下面节点</p>
+<p><img src="/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/image-20231223181935921.png" alt="image-20231223181935921"></p>
+<p>以上无问题则hadoop集群启动成功</p>
+<h3 id="10-将待处理文件提交到hdfs文件系统"><a href="#10-将待处理文件提交到hdfs文件系统" class="headerlink" title="10.将待处理文件提交到hdfs文件系统"></a>10.将待处理文件提交到hdfs文件系统</h3><p>hdfs文件系统的可视化界面是在master的火狐浏览器中输入网址：master:50070</p>
+<p>在master命令行执行命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs dfs -put /home/cindyzhang/workData/temperatures/ /cloudcomputing/data/</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/image-20231118030401280.png"></p>
+<h3 id="11-执行MapReduce作业"><a href="#11-执行MapReduce作业" class="headerlink" title="11.执行MapReduce作业"></a>11.执行MapReduce作业</h3><p>在master命令行执行命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hadoop jar /home/cindyzhang/work/maxTemperatures/target/maxTemperatures-1.0-SNAPSHOT.jar com.xtu.zxd.maxTemperatures.maxTempMain /cloudcomputing/data/temperatures/* /cloudcomputing/outputs/output1</span><br></pre></td></tr></table></figure>
+
+<p><img src="/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/image-20231118031446177.png" alt="image-20231118031446177"></p>
+<h3 id="12-成功得到结果"><a href="#12-成功得到结果" class="headerlink" title="12.成功得到结果"></a>12.成功得到结果</h3><table>
+<thead>
+<tr>
+<th align="center">年份</th>
+<th align="center">最高气温</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1990</td>
+<td align="center">22.3</td>
+</tr>
+<tr>
+<td align="center">1991</td>
+<td align="center">21.4</td>
+</tr>
+<tr>
+<td align="center">1992</td>
+<td align="center">31.2</td>
+</tr>
+</tbody></table>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://cindyzhan9.com">CindyZhang</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://cindyzhan9.com/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/">https://cindyzhan9.com/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://cindyzhan9.com" target="_blank">CindyZhang's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E4%BA%91%E8%AE%A1%E7%AE%97/">云计算</a></div><div class="post_share"><div class="social-share" data-image="/img/avatar.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/12/23/%E6%B5%8B%E8%AF%95%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E5%8A%9F%E8%83%BD/" title="测试文件下载功能"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">测试文件下载功能</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC81OTI2MS8zNTcyMw=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/avatar.gif" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">CindyZhang</div><div class="author-info__description">爱你老妈，明天见</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">事情好多，随缘更新o(╥﹏╥)o</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%AE%9E%E9%AA%8C%E8%A6%81%E6%B1%82"><span class="toc-number">1.</span> <span class="toc-text">一、实验要求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-number">2.</span> <span class="toc-text">二、环境配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%A1%B9%E7%9B%AE%E6%90%AD%E5%BB%BA"><span class="toc-number">3.</span> <span class="toc-text">三、项目搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%96%B0%E5%BB%BAMaven%E9%A1%B9%E7%9B%AE"><span class="toc-number">3.1.</span> <span class="toc-text">1.新建Maven项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%AE%BE%E7%BD%AE%E7%BB%84%E6%A0%87%E8%AF%86%E5%92%8C%E9%A1%B9%E7%9B%AE%E6%A0%87%E8%AF%86"><span class="toc-number">3.2.</span> <span class="toc-text">2.设置组标识和项目标识</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%AE%BE%E7%BD%AE%E9%A1%B9%E7%9B%AE%E8%B7%AF%E5%BE%84%E5%92%8C%E5%90%8D%E7%A7%B0"><span class="toc-number">3.3.</span> <span class="toc-text">3.设置项目路径和名称</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96%E9%A1%B9"><span class="toc-number">3.4.</span> <span class="toc-text">4.添加依赖项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E9%85%8D%E7%BD%AElog4j%E6%96%B9%E4%BE%BF%E6%9F%A5%E7%9C%8B%E8%BF%90%E8%A1%8C%E6%97%A5%E5%BF%97"><span class="toc-number">3.5.</span> <span class="toc-text">5.配置log4j方便查看运行日志</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E8%BF%9B%E8%A1%8CMapReduce%E7%BC%96%E7%A8%8B"><span class="toc-number">3.6.</span> <span class="toc-text">6.进行MapReduce编程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E8%BF%9B%E8%A1%8C%E6%9C%AC%E5%9C%B0%E6%B5%8B%E8%AF%95"><span class="toc-number">3.7.</span> <span class="toc-text">7.进行本地测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E6%89%93%E5%8C%85%E4%BD%9C%E4%B8%9A"><span class="toc-number">3.8.</span> <span class="toc-text">8.打包作业</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-%E5%BC%80%E5%90%AFhadoop%E9%9B%86%E7%BE%A4"><span class="toc-number">3.9.</span> <span class="toc-text">9.开启hadoop集群</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-%E5%B0%86%E5%BE%85%E5%A4%84%E7%90%86%E6%96%87%E4%BB%B6%E6%8F%90%E4%BA%A4%E5%88%B0hdfs%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">3.10.</span> <span class="toc-text">10.将待处理文件提交到hdfs文件系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E6%89%A7%E8%A1%8CMapReduce%E4%BD%9C%E4%B8%9A"><span class="toc-number">3.11.</span> <span class="toc-text">11.执行MapReduce作业</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E6%88%90%E5%8A%9F%E5%BE%97%E5%88%B0%E7%BB%93%E6%9E%9C"><span class="toc-number">3.12.</span> <span class="toc-text">12.成功得到结果</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/23/%E4%BA%91%E8%AE%A1%E7%AE%97%E5%AE%9E%E9%AA%8C/" title="云计算实验">云计算实验</a><time datetime="2023-12-23T10:00:11.000Z" title="发表于 2023-12-23 18:00:11">2023-12-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/23/%E6%B5%8B%E8%AF%95%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD%E5%8A%9F%E8%83%BD/" title="测试文件下载功能">测试文件下载功能</a><time datetime="2023-12-23T03:57:34.000Z" title="发表于 2023-12-23 11:57:34">2023-12-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/09/%E8%93%9D%E6%A1%A5%E6%9D%AF%E8%BE%85%E5%AF%BC%E8%AF%BE-1-2-%E4%B9%A0%E9%A2%98%E8%AF%BE-%E9%80%92%E6%8E%A8%E4%B8%8E%E9%80%92%E5%BD%92/" title="蓝桥杯辅导课 1.2 习题课-递推与递归">蓝桥杯辅导课 1.2 习题课-递推与递归</a><time datetime="2023-12-09T15:15:47.000Z" title="发表于 2023-12-09 23:15:47">2023-12-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/08/%E8%93%9D%E6%A1%A5%E6%9D%AF%E8%BE%85%E5%AF%BC%E8%AF%BE-%E7%BB%83%E4%B9%A01-1/" title="蓝桥杯辅导课 练习1.1">蓝桥杯辅导课 练习1.1</a><time datetime="2023-12-08T15:35:12.000Z" title="发表于 2023-12-08 23:35:12">2023-12-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/08/%E8%93%9D%E6%A1%A5%E6%9D%AF%E8%BE%85%E5%AF%BC%E8%AF%BE1-1-%E6%95%99%E5%AD%A6%E8%A7%84%E5%88%92-%E9%80%92%E5%BD%92/" title="蓝桥杯辅导课 1.1 教学规划&amp;递归">蓝桥杯辅导课 1.1 教学规划&amp;递归</a><time datetime="2023-12-08T15:22:04.000Z" title="发表于 2023-12-08 23:22:04">2023-12-08</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By CindyZhang</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script><script>(() => {
+  const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaid.length === 0) return
+  const runMermaid = () => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    Array.from($mermaid).forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+      const mermaidID = 'mermaid-' + index
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+
+      const renderV10 = () => {
+        renderFn.then(({svg}) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svg)
+        })
+      }
+
+      const renderV9 = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      typeof renderFn === 'string' ? renderV9(renderFn) : renderV10()
+    })
+  }
+
+  const loadMermaid = () => {
+    window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaid)
+  }
+
+  btf.addGlobalFn('themeChange', runMermaid, 'mermaid')
+
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(()=>{
+  const loadLivere = () => {
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><script id="click-heart" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-heart.min.js" async="async" mobile="true"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
