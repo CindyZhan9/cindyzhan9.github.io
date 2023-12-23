@@ -143,13 +143,6 @@
   </url>
   
   <url>
-    <loc>https://cindyzhan9.com/categories/%E5%8D%9A%E5%AE%A2/</loc>
-    <lastmod>2023-12-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://cindyzhan9.com/categories/%E6%AF%94%E8%B5%9B/</loc>
     <lastmod>2023-12-23</lastmod>
     <changefreq>weekly</changefreq>
@@ -157,7 +150,7 @@
   </url>
   
   <url>
-    <loc>https://cindyzhan9.com/categories/%E5%8D%9A%E5%AE%A2/%E6%B5%8B%E8%AF%95/</loc>
+    <loc>https://cindyzhan9.com/categories/%E5%8D%9A%E5%AE%A2/</loc>
     <lastmod>2023-12-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -165,6 +158,13 @@
   
   <url>
     <loc>https://cindyzhan9.com/categories/%E6%AF%94%E8%B5%9B/%E8%93%9D%E6%A1%A5%E6%9D%AF/</loc>
+    <lastmod>2023-12-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://cindyzhan9.com/categories/%E5%8D%9A%E5%AE%A2/%E6%B5%8B%E8%AF%95/</loc>
     <lastmod>2023-12-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
